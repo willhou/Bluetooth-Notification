@@ -11,7 +11,8 @@ import android.util.Log;
 
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	
-	public static final String TAG = "BluetoothBroadcastReceiver"; 
+	final String TAG = "BluetoothBroadcastReceiver"; 
+	final int ID = 46709394;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -42,7 +43,7 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
         	}         	
 
 			notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
-			manager.notify(1, notification);
+			manager.notify(ID, notification);
         }		
 	}
 }
