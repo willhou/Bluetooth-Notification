@@ -26,8 +26,8 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 		BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = null;
+        String tickerText = null;
         String contentText = "Address: " + device.getAddress();
-        String tickerText;
 		Log.d(TAG, action);
 		
         if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
@@ -37,39 +37,36 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
             if (state == BluetoothDevice.BOND_BONDED
                     && prefs.getBoolean(Key.PAIRED, true)) {
                 tickerText = "Paired with " + device.getName();
-                notification = constructNotification(context, tickerText, tickerText, contentText);
         	}
             else if (state == BluetoothDevice.BOND_BONDING
                     && prefs.getBoolean(Key.PAIRING, true)) {
                 tickerText = "Pairing with " + device.getName() + "...";
-                notification = constructNotification(context, tickerText, tickerText, contentText);
         	} 
             else if (state == BluetoothDevice.BOND_NONE
                     && prefs.getBoolean(Key.UNPAIRED, true)) {
                 tickerText = "Unpaired with " + device.getName();
-                notification = constructNotification(context, tickerText, tickerText, contentText);
         	}
+            else return;
         } 
         else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)
                 && prefs.getBoolean(Key.CONNECTED, true)) {
             Log.d(TAG, "Connected");
             tickerText = "Connected to " + device.getName();
-            notification = constructNotification(context, tickerText, tickerText, contentText);
         }
         else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action) 
                 && prefs.getBoolean(Key.DISCONNECTED, true)) {
             Log.d(TAG, "Disconnected");
             tickerText = "Disconnected from " + device.getName();
-            notification = constructNotification(context, tickerText, tickerText, contentText);
         }
         else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action) 
                 && prefs.getBoolean(Key.DISCONNECT_REQUESTED, true)) {
             Log.d(TAG, "Disconnect requested");
             tickerText = "Request disconnect from " + device.getName();
-            notification = constructNotification(context, tickerText, tickerText, contentText);
         }
-        
-        if (notification != null) manager.notify(ID, notification);
+        else return;
+
+        notification = constructNotification(context, tickerText, tickerText, contentText);
+        manager.notify(ID, notification);
 	}
 	
 	Notification constructNotification(Context context, String tickerText, String titleText, String contentText) {
