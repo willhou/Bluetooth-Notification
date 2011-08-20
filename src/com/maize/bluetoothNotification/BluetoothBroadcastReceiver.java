@@ -33,17 +33,34 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
         	Log.d(TAG, "Bond state changed to " + state);
         	
         	if (state == BluetoothDevice.BOND_BONDED) {
-    			notification.tickerText = "Connected to " + device.getName();
+    			notification.tickerText = "Paired with " + device.getName();
         	}
         	else if (state == BluetoothDevice.BOND_BONDING) {
-    			notification.tickerText = "Connecting to " + device.getName() + "...";	
+    			notification.tickerText = "Pairing with " + device.getName() + "...";	
         	} 
         	else if (state == BluetoothDevice.BOND_NONE) {
-    			notification.tickerText = "Disconnected from " + device.getName();
-        	}         	
-
+    			notification.tickerText = "Unpaired with " + device.getName();
+        	}
 			notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
 			manager.notify(ID, notification);
-        }		
+        }
+        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+            Log.d(TAG, "Connected");
+            notification.tickerText = "Connected to " + device.getName();
+            notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
+            manager.notify(ID, notification);
+        }
+        else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+            Log.d(TAG, "Disconnected");
+            notification.tickerText = "Disconnected from " + device.getName();
+            notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
+            manager.notify(ID, notification);
+        }
+        else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+            Log.d(TAG, "Disconnect requested");
+            notification.tickerText = "Request disconnect from " + device.getName();
+            notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
+            manager.notify(ID, notification);
+        }
 	}
 }
