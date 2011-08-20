@@ -85,7 +85,8 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
             notification.defaults |= Notification.DEFAULT_VIBRATE;
         }        
         
-        Intent notificationIntent = new Intent();
+        Intent notificationIntent = new Intent(Intent.ACTION_MAIN);
+        notificationIntent.setClassName("com.android.settings", "com.android.settings.bluetooth.BluetoothSettings");
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);     
         notification.setLatestEventInfo(context, titleText, contentText, contentIntent);
 	    return notification;
