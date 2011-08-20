@@ -7,60 +7,89 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	
 	final String TAG = "BluetoothBroadcastReceiver"; 
-	final int ID = 46709394;
+	final int ID = 46709394;	
+	
+    SharedPreferences prefs;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        
+        String action = intent.getAction();
 		BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-		String action = intent.getAction();
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = null;
+        String contentText = "Address: " + device.getAddress();
+        String tickerText;
 		Log.d(TAG, action);
-		
-		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification();
-		notification.icon = R.drawable.icon;
-		notification.when = System.currentTimeMillis();
-    	notification.defaults = Notification.DEFAULT_VIBRATE;
-		Intent notificationIntent = new Intent();
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);		
 		
         if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
         	int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE);
         	Log.d(TAG, "Bond state changed to " + state);
         	
-        	if (state == BluetoothDevice.BOND_BONDED) {
-    			notification.tickerText = "Paired with " + device.getName();
+            if (state == BluetoothDevice.BOND_BONDED
+                    && prefs.getBoolean(Key.PAIRED, true)) {
+                tickerText = "Paired with " + device.getName();
+                notification = constructNotification(context, tickerText, tickerText, contentText);
         	}
-        	else if (state == BluetoothDevice.BOND_BONDING) {
-    			notification.tickerText = "Pairing with " + device.getName() + "...";	
+            else if (state == BluetoothDevice.BOND_BONDING
+                    && prefs.getBoolean(Key.PAIRING, true)) {
+                tickerText = "Pairing with " + device.getName() + "...";
+                notification = constructNotification(context, tickerText, tickerText, contentText);
         	} 
-        	else if (state == BluetoothDevice.BOND_NONE) {
-    			notification.tickerText = "Unpaired with " + device.getName();
+            else if (state == BluetoothDevice.BOND_NONE
+                    && prefs.getBoolean(Key.UNPAIRED, true)) {
+                tickerText = "Unpaired with " + device.getName();
+                notification = constructNotification(context, tickerText, tickerText, contentText);
         	}
-			notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
-			manager.notify(ID, notification);
-        }
-        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+        } 
+        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)
+                && prefs.getBoolean(Key.CONNECTED, true)) {
             Log.d(TAG, "Connected");
-            notification.tickerText = "Connected to " + device.getName();
-            notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
-            manager.notify(ID, notification);
+            tickerText = "Connected to " + device.getName();
+            notification = constructNotification(context, tickerText, tickerText, contentText);
         }
-        else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+        else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action) 
+                && prefs.getBoolean(Key.DISCONNECTED, true)) {
             Log.d(TAG, "Disconnected");
-            notification.tickerText = "Disconnected from " + device.getName();
-            notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
-            manager.notify(ID, notification);
+            tickerText = "Disconnected from " + device.getName();
+            notification = constructNotification(context, tickerText, tickerText, contentText);
         }
-        else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+        else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action) 
+                && prefs.getBoolean(Key.DISCONNECT_REQUESTED, true)) {
             Log.d(TAG, "Disconnect requested");
-            notification.tickerText = "Request disconnect from " + device.getName();
-            notification.setLatestEventInfo(context, notification.tickerText, "Address: " + device.getAddress(), contentIntent);
-            manager.notify(ID, notification);
+            tickerText = "Request disconnect from " + device.getName();
+            notification = constructNotification(context, tickerText, tickerText, contentText);
         }
+        manager.notify(ID, notification);
+	}
+	
+	Notification constructNotification(Context context, String tickerText, String titleText, String contentText) {
+	    Notification notification = new Notification();
+        notification.icon = R.drawable.icon;
+        notification.when = System.currentTimeMillis();
+        notification.tickerText = tickerText;
+        
+        if (prefs.getBoolean(Key.LIGHTS, true)) { 
+            notification.defaults |= Notification.DEFAULT_LIGHTS;
+        }
+        else if (prefs.getBoolean(Key.SOUND, true)) { 
+            notification.defaults |= Notification.DEFAULT_SOUND;
+        }
+        else if (prefs.getBoolean(Key.VIBRATE, true)) { 
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+        }        
+        
+        Intent notificationIntent = new Intent();
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);     
+        notification.setLatestEventInfo(context, titleText, contentText, contentIntent);
+	    return notification;
 	}
 }
