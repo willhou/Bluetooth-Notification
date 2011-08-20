@@ -68,7 +68,8 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
             tickerText = "Request disconnect from " + device.getName();
             notification = constructNotification(context, tickerText, tickerText, contentText);
         }
-        manager.notify(ID, notification);
+        
+        if (notification != null) manager.notify(ID, notification);
 	}
 	
 	Notification constructNotification(Context context, String tickerText, String titleText, String contentText) {
