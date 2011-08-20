@@ -14,6 +14,8 @@ import android.util.Log;
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	
 	final String TAG = "BluetoothBroadcastReceiver"; 
+	final String PATH_SETTINGS_PKG = "com.android.settings";
+	final String PATH_SETTINGS_BLUETOOTH = ".bluetooth.BluetoothSettings";
 	final int ID = 46709394;	
 	
     SharedPreferences prefs;
@@ -86,7 +88,7 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
         }        
         
         Intent notificationIntent = new Intent(Intent.ACTION_MAIN);
-        notificationIntent.setClassName("com.android.settings", "com.android.settings.bluetooth.BluetoothSettings");
+        notificationIntent.setClassName(PATH_SETTINGS_PKG, PATH_SETTINGS_PKG + PATH_SETTINGS_BLUETOOTH);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);     
         notification.setLatestEventInfo(context, titleText, contentText, contentIntent);
 	    return notification;
