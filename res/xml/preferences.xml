@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen android:persistent="true" xmlns:android="http://schemas.android.com/apk/res/android" >
-	<PreferenceCategory android:title="Gets notified when">
+    <PreferenceCategory android:title="Gets notified when">
         <CheckBoxPreference android:key="key_paired"
                 android:title="Paired"
                 android:defaultValue="true"/>
@@ -24,11 +24,11 @@
         <CheckBoxPreference android:key="key_lights"
                 android:title="Lights"
                 android:defaultValue="true"/>
-		<CheckBoxPreference android:key="key_sound"
-				android:title="Sound"
-				android:defaultValue="true"/>
-		<CheckBoxPreference android:key="key_vibrate"
-				android:title="Vibrate"
-				android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_sound"
+                android:title="Sound"
+                android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_vibrate"
+                android:title="Vibrate"
+                android:defaultValue="true"/>
     </PreferenceCategory>
 </PreferenceScreen>
