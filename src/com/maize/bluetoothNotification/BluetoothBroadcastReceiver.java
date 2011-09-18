@@ -13,25 +13,27 @@ import android.util.Log;
 
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	
-	final String TAG = "BluetoothBroadcastReceiver"; 
+    final String TAG = "BluetoothBroadcastReceiver"; 
 	final String PATH_SETTINGS_PKG = "com.android.settings";
 	final String PATH_SETTINGS_BLUETOOTH = ".bluetooth.BluetoothSettings";
 	final int ID = 46709394;	
 	
-    SharedPreferences prefs;
+	SharedPreferences prefs;
 	
-	@Override
-	public void onReceive(Context context, Intent intent) {
+    @Override
+    public void onReceive(Context context, Intent intent) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         
-        String action = intent.getAction();
-		BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+    	BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = null;
+        
         String tickerText = null;
         String contentText = "Address: " + device.getAddress();
-		Log.d(TAG, action);
-		
+        
+        String action = intent.getAction();
+        Log.d(TAG, action);
+    	
         if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
         	int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE);
         	Log.d(TAG, "Bond state changed to " + state);
@@ -66,13 +68,13 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
             tickerText = "Request disconnect from " + device.getName();
         }
         else return;
-
+    
         notification = constructNotification(context, tickerText, tickerText, contentText);
         manager.notify(ID, notification);
-	}
+    }
 	
-	Notification constructNotification(Context context, String tickerText, String titleText, String contentText) {
-	    Notification notification = new Notification();
+    private Notification constructNotification(Context context, String tickerText, String titleText, String contentText) {
+        Notification notification = new Notification();
         notification.icon = R.drawable.icon;
         notification.when = System.currentTimeMillis();
         notification.tickerText = tickerText;
@@ -91,6 +93,6 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
         notificationIntent.setClassName(PATH_SETTINGS_PKG, PATH_SETTINGS_PKG + PATH_SETTINGS_BLUETOOTH);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);     
         notification.setLatestEventInfo(context, titleText, contentText, contentIntent);
-	    return notification;
-	}
+        return notification;
+    }
 }
