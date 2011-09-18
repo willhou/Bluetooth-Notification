@@ -14,11 +14,11 @@ import android.util.Log;
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	
     final String TAG = "BluetoothBroadcastReceiver"; 
-	final String PATH_SETTINGS_PKG = "com.android.settings";
-	final String PATH_SETTINGS_BLUETOOTH = ".bluetooth.BluetoothSettings";
-	final int ID = 46709394;	
-	
-	SharedPreferences prefs;
+    final String PATH_SETTINGS_PKG = "com.android.settings";
+    final String PATH_SETTINGS_BLUETOOTH = ".bluetooth.BluetoothSettings";
+    final int ID = 46709394;	
+    
+    SharedPreferences prefs;
 	
     @Override
     public void onReceive(Context context, Intent intent) {
