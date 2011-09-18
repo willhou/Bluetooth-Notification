@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen android:persistent="true" xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="Gets notified when">
-		  	<CheckBoxPreference android:key="key_paired"
-		            android:title="Paired"
-		            android:defaultValue="true"/>
-		    <CheckBoxPreference android:key="key_pairing"
-		            android:title="Pairing"
-		            android:defaultValue="true"/>
-		    <CheckBoxPreference android:key="key_unpaired"
-		            android:title="Unpaired"
-		            android:defaultValue="true"/>
-		    <CheckBoxPreference android:key="key_connected"
-		            android:title="Connected"
-		            android:defaultValue="true"/>
-		    <CheckBoxPreference android:key="key_disconnected"
-		            android:title="Disconnected"
-		            android:defaultValue="true"/>
-		    <CheckBoxPreference android:key="key_disconnect_requested"
-		            android:title="Disconnect requested"
-		            android:defaultValue="true"/>
+	<PreferenceCategory android:title="Gets notified when">
+        <CheckBoxPreference android:key="key_paired"
+                android:title="Paired"
+                android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_pairing"
+                android:title="Pairing"
+                android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_unpaired"
+                android:title="Unpaired"
+                android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_connected"
+                android:title="Connected"
+                android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_disconnected"
+                android:title="Disconnected"
+                android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_disconnect_requested"
+                android:title="Disconnect requested"
+                android:defaultValue="true"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Notification style">
-            <CheckBoxPreference android:key="key_lights"
-                    android:title="Lights"
-                    android:defaultValue="true"/>
-            <CheckBoxPreference android:key="key_sound"
-                    android:title="Sound"
-                    android:defaultValue="true"/>
-            <CheckBoxPreference android:key="key_vibrate"
-                    android:title="Vibrate"
-                    android:defaultValue="true"/>
+        <CheckBoxPreference android:key="key_lights"
+                android:title="Lights"
+                android:defaultValue="true"/>
+		<CheckBoxPreference android:key="key_sound"
+				android:title="Sound"
+				android:defaultValue="true"/>
+		<CheckBoxPreference android:key="key_vibrate"
+				android:title="Vibrate"
+				android:defaultValue="true"/>
     </PreferenceCategory>
 </PreferenceScreen>
